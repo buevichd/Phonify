@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.0.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <beans profile="default">
+
+        <context:component-scan base-package="com.expertsoft.core"/>
+
+        <!-- Transaction Manager -->
+        <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="dataSource"/>
+        </bean>
+
+        <!-- Data Source -->
+        <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="${db.driverClassName}"/>
+            <property name="url" value="${db.url}"/>
+            <property name="username" value="${db.username}"/>
+            <property name="password" value="${db.password}"/>
+        </bean>
+
+        <jdbc:initialize-database data-source="dataSource" enabled="${db.initialize}">
+            <jdbc:script location="classpath:schema.sql" />
+        </jdbc:initialize-database>
+
+        <!-- Phone DAO -->
+        <bean id="phoneDao" class="com.expertsoft.core.model.jdbc.JdbcPhoneDao">
+            <property name="dataSource" ref="dataSource"/>
+        </bean>
+
+        <!-- Order Item DAO -->
+        <bean id="orderItemDao" class="com.expertsoft.core.model.jdbc.JdbcOrderItemDao">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="phoneDao" ref="phoneDao"/>
+        </bean>
+
+        <!-- Order Dao -->
+        <bean id="orderDao" class="com.expertsoft.core.model.jdbc.JdbcOrderDao">
+            <property name="dataSource" ref="dataSource"/>
+            <property name="orderItemDao" ref="orderItemDao"/>
+        </bean>
+
+        <!-- Shopping Cart -->
+        <bean name="shoppingCart" class="com.expertsoft.core.cart.ShoppingCart"/>
+
+    </beans>
+
+    <beans profile="dev">
+        <context:property-placeholder location="classpath:prop/*.properties"/>
+    </beans>
+
+    <beans profile="test">
+        <context:property-placeholder location="testprop/*.properties"/>
+    </beans>
+
+</beans>

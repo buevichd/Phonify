@@ -1,0 +1,28 @@
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+    <definition name="template" template="/WEB-INF/jsp/common/template.jsp">
+        <put-attribute name="header" value="/WEB-INF/jsp/common/header.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/jsp/common/footer.jsp"/>
+    </definition>
+
+    <definition name="productList" extends="template">
+        <put-attribute name="content" value="/WEB-INF/jsp/productList.jsp"/>
+    </definition>
+
+    <definition name="productDetails" extends="template">
+        <put-attribute name="content" value="/WEB-INF/jsp/productDetails.jsp"/>
+    </definition>
+
+    <definition name="cart" extends="template">
+        <put-attribute name="content" value="/WEB-INF/jsp/cart.jsp"/>
+    </definition>
+
+    <definition name="order" extends="template">
+        <put-attribute name="content" value="/WEB-INF/jsp/order.jsp"/>
+    </definition>
+
+    <definition name="confirmation" extends="template">
+        <put-attribute name="content" value="/WEB-INF/jsp/confirmation.jsp"/>
+    </definition>
+
+</tiles-definitions>
