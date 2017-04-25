@@ -10,6 +10,7 @@
         <link rel="stylesheet" type="text/css" href="<c:url value="/resources/bootstrap/css/bootstrap.css"/>">
         <script type="text/javascript" src="<c:url value="/resources/jquery/jquery-3.1.1.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/resources/js/phonify.js"/>"></script>
+        <link rel="icon" type="image/vnd.microsoft.icon" href="<c:url value="/resources/common/favicon.ico"/>"/>
     </head>
     <body>
         <div class="col-lg-offset-2 col-lg-8">

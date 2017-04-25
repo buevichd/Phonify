@@ -19,6 +19,7 @@ CREATE TABLE phonify_order (
   first_name VARCHAR(25),
   last_name VARCHAR(25),
   delivery_address VARCHAR(50),
-  contact_phone_no VARCHAR(10)
+  contact_phone_no VARCHAR(10),
+  delivery_status VARCHAR(12) DEFAULT 'INITIAL' NOT NULL
 );
 

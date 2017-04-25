@@ -1,0 +1,32 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns="http://www.springframework.org/schema/security"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+             http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+             http://www.springframework.org/schema/security
+             http://www.springframework.org/schema/security/spring-security-4.2.xsd">
+
+    <http>
+        <form-login login-page="/login" login-processing-url="/login"
+                    authentication-success-handler-ref="authenticationSuccessHandler"/>
+        <logout/>
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <csrf disabled="false"/>
+    </http>
+
+    <beans:bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler">
+        <beans:property name="targetUrlParameter" value="redirectUrl"/>
+    </beans:bean>
+
+    <!-- Authentication Manager -->
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service id="userService" data-source-ref="dataSource"
+                               users-by-username-query=
+                                       "SELECT username, password, true FROM phonify_user WHERE username = ?"
+                               authorities-by-username-query=
+                                       "SELECT username, authority FROM phonify_user_authority WHERE username = ?" />
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>

@@ -13,10 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -24,16 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.expertsoft.web.controller.constants.ControllerConstants.*;
-
 @Controller
 @RequestMapping("/cart")
 public class ShoppingCartController {
 
     private static final String VIEW_NAME_SHOPPING_CART = "cart";
+    public static final String ATTRIBUTE_SHOPPING_CART = "shoppingCart";
 
     private static final String CART_ITEM_LIST_FORM = "cartItemListForm";
-
     private static final String FIELD_QUANTITY = "quantity";
 
     @Autowired
@@ -42,11 +37,14 @@ public class ShoppingCartController {
     @Autowired
     private MessageSource messageSource;
 
+    @ModelAttribute(ATTRIBUTE_SHOPPING_CART)
+    public ShoppingCart getShoppingCartAttribute() {
+        return shoppingCartService.getShoppingCart();
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public String getShoppingCart(Model model) {
-        model.addAttribute(ATTRIBUTE_MINI_CART, shoppingCartService.getMiniCart());
         model.addAttribute(CART_ITEM_LIST_FORM, getCartItemListForm());
-        model.addAttribute(ATTRIBUTE_SHOPPING_CART, shoppingCartService.getShoppingCart());
         return VIEW_NAME_SHOPPING_CART;
     }
 
@@ -60,9 +58,20 @@ public class ShoppingCartController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public String updateShoppingCart(@Valid CartItemListForm cartItemListForm, BindingResult bindingResult, Model model) {
+    public String updateShoppingCart(@RequestParam(name = "delete", required = false) Long keyOfDeletedPhone, Model model,
+                                     @Valid CartItemListForm cartItemListForm, BindingResult bindingResult) {
+        if (keyOfDeletedPhone != null) {
+            // "Delete" button was pressed.
+            shoppingCartService.deleteOrderItem(keyOfDeletedPhone);
+        } else {
+            // "Update" button was presses.
+            return updateCartItems(cartItemListForm, bindingResult, model);
+        }
+        return "redirect:/cart";
+    }
+
+    private String updateCartItems(CartItemListForm cartItemListForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute(ATTRIBUTE_MINI_CART, shoppingCartService.getMiniCart());
             model.addAttribute(CART_ITEM_LIST_FORM, cartItemListForm);
             model.addAttribute(ATTRIBUTE_SHOPPING_CART, shoppingCartService.getShoppingCart());
             return VIEW_NAME_SHOPPING_CART;
@@ -100,14 +109,6 @@ public class ShoppingCartController {
             message.setMessage(messageSource.getMessage(fieldError, null));
         }
         return message;
-    }
-
-    @ResponseBody
-    @RequestMapping(path = "/delete", method = RequestMethod.POST)
-    public String deleteOrderItemFromShoppingCart(@RequestParam("key") Long key, Model model) {
-        shoppingCartService.deleteOrderItem(key);
-        model.addAttribute(ATTRIBUTE_MINI_CART, shoppingCartService.getMiniCart());
-        return "Success!";
     }
 
 }

@@ -1,26 +1,59 @@
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
 <%--@elvariable id="miniCart" type="com.expertsoft.core.cart.MiniCart"--%>
 
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <div class="col-lg-4">
-                <a href="<c:url value="/productList"/>">
-                    <img src="<c:url value="/resources/common/phonify.png"/>" />
-                </a>
-            </div>
+            <a  href="<c:url value="/productList"/>">
+                <img src="<c:url value="/resources/common/phonify.png"/>" />
+            </a>
         </div>
-        <c:if test="${not empty miniCart}">
-            <div class="collapse navbar-collapse">
-                <div id="mini-cart" class="nav navbar-nav navbar-right navbar">
-                    <a href="<c:url value="/cart"/>" class="btn btn-default">
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <security:authorize var="isAuthenticated" access="isAuthenticated()"/>
+
+            <c:choose>
+                <c:when test="${isAuthenticated}">
+
+                    <security:authorize access="hasRole('ROLE_ADMIN')">
+                        <li class="active">
+                            <c:url var="editOrdersUrl" value="/admin/orders"/>
+                            <a href="${editOrdersUrl}">Edit Orders</a>
+                        </li>
+                    </security:authorize>
+
+                    <li>
+                        <a>
+                            Hi, <security:authentication property="principal.username"/>!
+                        </a>
+                    </li>
+
+                    <li class="">
+                        <c:url var="logoutUrl" value="/logout"/>
+                        <form action="${logoutUrl}" method="post">
+                            <button class="btn navbar-btn">Log Out</button>
+                            <security:csrfInput/>
+                        </form>
+                    </li>
+                </c:when>
+                <c:otherwise>
+                    <li class="active">
+                        <a href="<c:url value="/login" />" class="">Log In</a>
+                    </li>
+                </c:otherwise>
+            </c:choose>
+
+            <c:if test="${not empty miniCart}">
+                <li>
+                    <a id="mini-cart" href="<c:url value="/cart"/>">
                         <span id="item-count">${miniCart.itemCount}</span> items
                         (<span id="cart-amount">${miniCart.amount}</span>$)
                     </a>
-                </div>
-            </div>
-        </c:if>
+                </li>
+            </c:if>
+
     </div>
 </nav>

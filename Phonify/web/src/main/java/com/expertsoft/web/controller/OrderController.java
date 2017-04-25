@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 
-import static com.expertsoft.web.controller.constants.ControllerConstants.ATTRIBUTE_MINI_CART;
-import static com.expertsoft.web.controller.constants.ControllerConstants.ATTRIBUTE_ORDER;
-
 @Controller
 @RequestMapping("/order")
 public class OrderController {
@@ -26,6 +23,7 @@ public class OrderController {
     private static final String VIEW_NAME_ORDER = "order";
     private static final String VIEW_NAME_CONFIRMATION = "confirmation";
 
+    public static final String ATTRIBUTE_ORDER = "order";
     private static final String ATTRIBUTE_ORDER_CONTACT_INFO_FORM = "orderContactInfoForm";
 
     @Autowired
@@ -36,7 +34,6 @@ public class OrderController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String getOrder(Model model) {
-        model.addAttribute(ATTRIBUTE_MINI_CART, shoppingCartService.getMiniCart());
         model.addAttribute(ATTRIBUTE_ORDER_CONTACT_INFO_FORM, createOrderContactInfoForm());
         model.addAttribute(ATTRIBUTE_ORDER, shoppingCartService.getShoppingCart());
         return VIEW_NAME_ORDER;
@@ -61,6 +58,7 @@ public class OrderController {
         }
         updateOrderContactInfo(orderContactInfoForm);
         Order order = createOrderFromShoppingCart();
+        order.setDeliveryStatus(Order.DeliveryStatus.IN_PROCESS);
         orderDao.create(order);
         shoppingCartService.clearShoppingCart();
         return "redirect:confirmation/" + order.getKey();

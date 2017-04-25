@@ -23,11 +23,11 @@ public class JdbcOrderDao extends NamedParameterJdbcDaoSupport implements OrderD
 
     private static final String GET_ORDER = "SELECT * FROM phonify_order WHERE phonify_order.key = :key";
     private static final String CREATE_ORDER = "INSERT INTO phonify_order " +
-            "(subtotal, delivery_price, total_price, first_name, last_name, delivery_address, contact_phone_no) " +
-            "VALUES (:subtotal, :delivery_price, :total_price, :first_name, :last_name, :delivery_address, :contact_phone_no)";
+            "(subtotal, delivery_price, total_price, first_name, last_name, delivery_address, contact_phone_no, delivery_status) " +
+            "VALUES (:subtotal, :delivery_price, :total_price, :first_name, :last_name, :delivery_address, :contact_phone_no, :delivery_status)";
     private static final String UPDATE_ORDER = "UPDATE phonify_order SET subtotal=:subtotal, delivery_price=:delivery_price, " +
             "total_price=:total_price, first_name=:first_name, last_name=:last_name, delivery_address=:delivery_address," +
-            "contact_phone_no=:contact_phone_no WHERE phonify_order.key = :key";
+            "contact_phone_no=:contact_phone_no, delivery_status=:delivery_status WHERE phonify_order.key = :key";
     private static final String GET_ALL_ORDERS = "SELECT * FROM phonify_order";
 
     private static final String KEY = "key";
@@ -38,6 +38,7 @@ public class JdbcOrderDao extends NamedParameterJdbcDaoSupport implements OrderD
     private static final String LAST_NAME = "last_name";
     private static final String DELIVERY_ADDRESS = "delivery_address";
     private static final String CONTACT_PHONE_NO = "contact_phone_no";
+    private static final String DELIVERY_STATUS = "delivery_status";
 
     private OrderItemDao orderItemDao;
 
@@ -56,6 +57,7 @@ public class JdbcOrderDao extends NamedParameterJdbcDaoSupport implements OrderD
             order.setLastName(resultSet.getString(LAST_NAME));
             order.setDeliveryAddress(resultSet.getString(DELIVERY_ADDRESS));
             order.setContactPhoneNo(resultSet.getString(CONTACT_PHONE_NO));
+            order.setDeliveryStatus(Order.DeliveryStatus.valueOf(resultSet.getString(DELIVERY_STATUS)));
             order.setOrderItems(orderItemDao.getOrderItemsByOrderKey(order.getKey()));
             return order;
         }));
@@ -101,6 +103,7 @@ public class JdbcOrderDao extends NamedParameterJdbcDaoSupport implements OrderD
         map.put(LAST_NAME, order.getLastName());
         map.put(DELIVERY_ADDRESS, order.getDeliveryAddress());
         map.put(CONTACT_PHONE_NO, order.getContactPhoneNo());
+        map.put(DELIVERY_STATUS, order.getDeliveryStatus().toString());
         return map;
     }
 
@@ -127,6 +130,7 @@ public class JdbcOrderDao extends NamedParameterJdbcDaoSupport implements OrderD
             order.setLastName((String) row.get(LAST_NAME));
             order.setDeliveryAddress((String) row.get(DELIVERY_ADDRESS));
             order.setContactPhoneNo((String) row.get(CONTACT_PHONE_NO));
+            order.setDeliveryStatus(Order.DeliveryStatus.valueOf((String) row.get(DELIVERY_STATUS)));
             ordersMap.put(order.getKey(), order);
         }
         return ordersMap;

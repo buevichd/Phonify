@@ -5,11 +5,6 @@
     <c:when test="${not empty order.orderItems}">
 
         <div class="h1">Thank you for your order!</div>
-        <div>
-            <a href="<c:url value='/productList'/>" class="btn btn-default">
-                Back to product list
-            </a>
-        </div>
 
         <div class="row">
             <table class="table table-striped table-bordered">

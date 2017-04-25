@@ -79,6 +79,7 @@ public class JdbcOrderDaoTest {
         order.setDeliveryAddress(DELIVERY_ADDRESS);
         order.setContactPhoneNo(PHONE_NUMBER);
         order.setOrderItems(Collections.singletonList(orderItem));
+        order.setDeliveryStatus(Order.DeliveryStatus.INITIAL);
     }
 
     @Test

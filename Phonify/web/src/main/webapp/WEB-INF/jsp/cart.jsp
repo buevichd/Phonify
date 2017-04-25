@@ -42,7 +42,7 @@
                                     <s:errors path="cartItemList[${status.index}].quantity" cssClass="alert alert-danger" element="div"/>
                                 </td>
                                 <td>
-                                    <button class="btn btn-default delete-item-button" value="${phone.key}">
+                                    <button name="delete" class="btn btn-default delete-item-button" value="${phone.key}">
                                         Delete
                                     </button>
                                 </td>
@@ -55,7 +55,7 @@
                 <a href="<c:url value='/order'/>" class="btn btn-default pull-right">
                     Order
                 </a>
-                <s:button type="submit" class="btn btn-default pull-right">
+                <s:button type="submit" name="update" class="btn btn-default pull-right">
                     Update
                 </s:button>
             </div>

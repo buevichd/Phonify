@@ -8,15 +8,6 @@ $(document).ready(function() {
             })
         ;
     });
-
-    $(".delete-item-button").on("click", function (event) {
-        event.preventDefault();
-        $.post("/cart/delete", {"key" : event.target.value})
-            .done(function(response) {
-                location.reload(true);
-            })
-        ;
-    });
 });
 
 function updateMiniCart(miniCart) {

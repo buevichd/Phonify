@@ -3,10 +3,13 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-   http://www.springframework.org/schema/beans/spring-beans.xsd
-   http://www.springframework.org/schema/context
-   http://www.springframework.org/schema/context/spring-context-3.0.xsd
-   http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <beans profile="default">
         <context:component-scan base-package="com.expertsoft.web" />
@@ -14,6 +17,8 @@
         <mvc:default-servlet-handler/>
         <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
         <import resource="classpath:config.xml"/>
+        <import resource="security-config.xml"/>
+
 
         <!-- Tiles View Resolver -->
         <bean class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"/>
@@ -30,9 +35,23 @@
             <aop:scoped-proxy proxy-target-class="true"/>
         </bean>
 
+        <!-- Message Source -->
         <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
             <property name="basename" value="prop.messages"/>
         </bean>
+
+        <!-- Interceptors -->
+        <mvc:interceptors>
+            <mvc:interceptor>
+                <mvc:mapping path="/**"/>
+                <mvc:exclude-mapping path="/order/confirmation/**"/>
+                <mvc:exclude-mapping path="/resources/**"/>
+                <mvc:exclude-mapping path="/cart/add"/>
+                <mvc:exclude-mapping path="/logout"/>
+                <bean class="com.expertsoft.web.filter.MiniCartInterceptor"/>
+            </mvc:interceptor>
+
+        </mvc:interceptors>
 
     </beans>
 

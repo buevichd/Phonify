@@ -17,6 +17,8 @@ public class Order {
     private String deliveryAddress;
     private String contactPhoneNo;
 
+    private DeliveryStatus deliveryStatus = DeliveryStatus.INITIAL;
+
     public Order() {
 
     }
@@ -91,5 +93,17 @@ public class Order {
 
     public void setContactPhoneNo(String contactPhoneNo) {
         this.contactPhoneNo = contactPhoneNo;
+    }
+
+    public DeliveryStatus getDeliveryStatus() {
+        return deliveryStatus;
+    }
+
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+        this.deliveryStatus = deliveryStatus;
+    }
+
+    public enum DeliveryStatus {
+        INITIAL, IN_PROCESS, DELIVERED
     }
 }
