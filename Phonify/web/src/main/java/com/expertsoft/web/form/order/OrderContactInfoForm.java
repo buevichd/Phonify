@@ -47,8 +47,4 @@ public class OrderContactInfoForm {
     public void setContactPhoneNo(String contactPhoneNo) {
         this.contactPhoneNo = contactPhoneNo;
     }
-
-    public void stupidMethod() {
-
-    }
 }
