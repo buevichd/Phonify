@@ -36,4 +36,8 @@ public class ProductController {
         return VIEW_NAME_PRODUCT_DETAILS;
     }
 
+    public void doEverything() {
+        System.out.println("Hello");
+    }
+
 }

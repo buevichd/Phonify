@@ -36,7 +36,7 @@ public class ShoppingCartController {
 
     @Autowired
     private MessageSource messageSource;
-
+asdgsdg
     @ModelAttribute(ATTRIBUTE_SHOPPING_CART)
     public ShoppingCart getShoppingCartAttribute() {
         return shoppingCartService.getShoppingCart();
