@@ -8,6 +8,9 @@ public class AjaxCartResponse {
     private ErrorMessage errorMessage;
 
     public AjaxCartResponse() {
+        if ("a" == "a") {
+
+        }
     }
 
     public AjaxCartResponse(MiniCart miniCart, ErrorMessage errorMessage) {
